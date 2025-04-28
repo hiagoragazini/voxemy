@@ -48,9 +48,6 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center">
                       <div className="relative group">
                         <button className="flex items-center space-x-2 text-gray-600 hover:text-[#0F2D5A] focus-visible">
-                          <div className="w-8 h-8 rounded-full bg-[#E6F0FF] flex items-center justify-center text-[#0F2D5A] font-medium">
-                            {userInfo.displayName.charAt(0).toUpperCase()}
-                          </div>
                           <span>{userInfo.displayName}</span>
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -122,9 +119,6 @@ export default function Navbar() {
           {userInfo && (
             <>
               <div className="flex items-center space-x-3 p-4 bg-[#E6F0FF] rounded-lg mb-4">
-                <div className="w-10 h-10 rounded-full bg-[#0F2D5A] flex items-center justify-center text-white font-medium">
-                  {userInfo.displayName.charAt(0).toUpperCase()}
-                </div>
                 <div>
                   <div className="font-medium text-[#0F2D5A]">{userInfo.displayName}</div>
                   <div className="text-xs text-gray-500">{userInfo.email}</div>
