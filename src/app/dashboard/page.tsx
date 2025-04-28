@@ -64,8 +64,10 @@ function Dashboard() {
               >
                 Criar Agente
               </Link>              <button 
-                onClick={() => window.location.href = 
-'/tutorials'} 
+                onClick={() => {
+                  console.log('Clicou em Ver Tutoriais');
+                  window.location.href = '/tutorials';
+                }} 
                 className="btn-secondary w-full py-2 text-center block"
               >
                 Ver Tutoriais
@@ -179,7 +181,10 @@ function Dashboard() {
                     
                     <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
                       <button 
-                        onClick={() => window.location.href = `/agent/${agent.id}`} 
+                        onClick={() => {
+                          console.log('Clicou em Ver Agente', agent.id);
+                          window.location.href = `/agent/${agent.id}`;
+                        }} 
                         className="text-gray-600 hover:text-[#0F2D5A] text-sm flex items-center"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -190,7 +195,10 @@ function Dashboard() {
                       </button>
                       
                       <button 
-                        onClick={() => window.location.href = `/agent/${agent.id}/edit`} 
+                        onClick={() => {
+                          console.log("Clicou em Editar Agente", agent.id);
+                          window.location.href = `/agent/${agent.id}/edit`;
+                        }} 
                         className="text-[#0F2D5A] hover:text-opacity-80 text-sm font-medium"
                       >
                         Editar
