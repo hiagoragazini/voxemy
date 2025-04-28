@@ -1,21 +1,19 @@
 import React from 'react';
 
-// Definindo o tipo esperado para as props da página dinâmica seguindo o padrão Next.js 13
-type PageProps = {
-  params: { agentId: string };
-  searchParams?: { [key: string]: string | string[] | undefined }; // searchParams é opcional
-};
-
-// Usando React.FC para tipar o componente funcional
-const ViewAgentPage: React.FC<PageProps> = ({ params }) => {
-  // Note que searchParams não está sendo usado aqui, mas está no tipo por conformidade
+// Definição correta de tipos para Next.js 15 com params como Promise
+export default async function ViewAgentPage({ 
+  params 
+}: { 
+  params: Promise<{ agentId: string }> 
+}) {
+  // Aguardar a resolução dos parâmetros antes de acessá-los
+  const { agentId } = await params;
+  
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Visualizar Agente: {params.agentId}</h1>
+      <h1 className="text-2xl font-bold mb-4">Visualizar Agente: {agentId}</h1>
       <p>Página em construção...</p>
       {/* Aqui você pode adicionar a lógica para buscar e exibir os detalhes do agente com base no agentId */}
     </div>
   );
-};
-
-export default ViewAgentPage;
+}
