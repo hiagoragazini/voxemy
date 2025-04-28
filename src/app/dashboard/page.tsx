@@ -65,10 +65,10 @@ function Dashboard() {
                 Criar Agente
               </Link>              <button 
                 onClick={() => {
-                  console.log('Clicou em Ver Tutoriais');
-                  window.location.href = '/tutorials';
+                  console.log("Clicou em Ver Tutoriais");
+                  window.location.href = "/tutorials";
                 }} 
-                className="btn-secondary w-full py-2 text-center block"
+                className="btn-secondary w-full py-2 text-center block relative z-10"
               >
                 Ver Tutoriais
               </button>
@@ -182,10 +182,10 @@ function Dashboard() {
                     <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
                       <button 
                         onClick={() => {
-                          console.log('Clicou em Ver Agente', agent.id);
+                          console.log("Clicou em Ver Agente", agent.id);
                           window.location.href = `/agent/${agent.id}`;
                         }} 
-                        className="text-gray-600 hover:text-[#0F2D5A] text-sm flex items-center"
+                        className="text-gray-600 hover:text-[#0F2D5A] text-sm flex items-center relative z-10"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -199,7 +199,7 @@ function Dashboard() {
                           console.log("Clicou em Editar Agente", agent.id);
                           window.location.href = `/agent/${agent.id}/edit`;
                         }} 
-                        className="text-[#0F2D5A] hover:text-opacity-80 text-sm font-medium"
+                        className="text-[#0F2D5A] hover:text-opacity-80 text-sm font-medium relative z-10"
                       >
                         Editar
                       </button>
