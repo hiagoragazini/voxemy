@@ -63,15 +63,19 @@ function Dashboard() {
                 className="btn-primary w-full py-2 text-center block"
               >
                 Criar Agente
-              </Link>              <button 
-                onClick={() => {
+              </Link>              <a 
+                href="/tutorials"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   console.log("Clicou em Ver Tutoriais");
                   window.location.href = "/tutorials";
                 }} 
-                className="btn-secondary w-full py-2 text-center block relative z-10"
+                className="btn-secondary w-full py-2 text-center block relative z-[9999] pointer-events-auto !important"
+                style={{ pointerEvents: 'auto' }}
               >
                 Ver Tutoriais
-              </button>
+              </a>
             </div>
           </div>
           
@@ -180,29 +184,37 @@ function Dashboard() {
                     </div>
                     
                     <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-100">
-                      <button 
-                        onClick={() => {
+                      <a 
+                        href={`/agent/${agent.id}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           console.log("Clicou em Ver Agente", agent.id);
                           window.location.href = `/agent/${agent.id}`;
                         }} 
-                        className="text-gray-600 hover:text-[#0F2D5A] text-sm flex items-center relative z-10"
+                        className="text-gray-600 hover:text-[#0F2D5A] text-sm flex items-center relative z-[9999] pointer-events-auto !important"
+                        style={{ pointerEvents: 'auto' }}
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
                         Ver
-                      </button>
+                      </a>
                       
-                      <button 
-                        onClick={() => {
+                      <a 
+                        href={`/agent/${agent.id}/edit`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
                           console.log("Clicou em Editar Agente", agent.id);
                           window.location.href = `/agent/${agent.id}/edit`;
                         }} 
-                        className="text-[#0F2D5A] hover:text-opacity-80 text-sm font-medium relative z-10"
+                        className="text-[#0F2D5A] hover:text-opacity-80 text-sm font-medium relative z-[9999] pointer-events-auto !important"
+                        style={{ pointerEvents: 'auto' }}
                       >
                         Editar
-                      </button>
+                      </a>
                     </div>
                   </div>
                 ))}
