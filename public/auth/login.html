@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Voxemy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 
+'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(to right, #7938b2, #c13584);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid #f1f1f1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            transition: border-color 0.2s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #7938b2;
+            box-shadow: 0 0 0 2px rgba(121, 56, 178, 0.2);
+        }
+        
+        .password-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .forgot-link {
+            font-size: 14px;
+            color: #7938b2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background-color: #7938b2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn:hover {
+            background-color: #6b2c9d;
+        }
+        
+        .error-message {
+            background-color: #ffebee;
+            border-left: 4px solid #ef5350;
+            color: #d32f2f;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .signup-link {
+            color: #7938b2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Voxemy</div>
+            <h1 class="title">Entre na sua conta</h1>
+            <p class="subtitle">Acesse sua conta para utilizar a plataforma Voxemy</p>
+        </div>
+        
+        <div class="card">
+            <!-- Remova o comentário abaixo para mostrar uma mensagem de erro -->
+            <!-- <div class="error-message">Email ou senha incorretos. Por favor, tente novamente.</div> -->
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <div class="password-header">
+                        <label for="password" class="form-label">Senha</label>
+                        <a href="/recuperar-senha" class="forgot-link">Esqueceu a senha?</a>
+                    </div>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn" id="loginButton">Entrar</button>
+            </form>
+        </div>
+        
+        <div class="footer">
+            <p>Ainda não tem uma conta? <a href="/cadastro" class="signup-link">Cadastre-se</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Script simples para simular o login
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Aqui você normalmente faria uma chamada para autenticar com Firebase
+            // Por enquanto, vamos apenas redirecionar para o dashboard após 1 segundo
+            document.getElementById('loginButton').textContent = 'Entrando...';
+            document.getElementById('loginButton').disabled = true;
+            
+            setTimeout(function() {
+                window.location.href = '/dashboard';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
