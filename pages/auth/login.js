@@ -4,6 +4,97 @@ import Link from 'next/link';
 import { auth } from '@/lib/firebase-fixed';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
+// Adicione estilos inline para garantir que funcionem
+const styles = {
+  container: {
+    display: 'flex',
+    minHeight: '100vh',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'linear-gradient(to bottom, #ffffff, #f0f0ff)',
+    padding: '20px'
+  },
+  card: {
+    width: '100%',
+    maxWidth: '400px',
+    background: '#ffffff',
+    borderRadius: '8px',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    overflow: 'hidden'
+  },
+  cardHeader: {
+    padding: '32px 24px 24px',
+    textAlign: 'center'
+  },
+  title: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    color: '#6c27ab',
+    marginBottom: '8px'
+  },
+  subtitle: {
+    fontSize: '14px',
+    color: '#666666',
+    marginBottom: '24px'
+  },
+  form: {
+    padding: '0 24px 24px'
+  },
+  formGroup: {
+    marginBottom: '20px'
+  },
+  label: {
+    display: 'block',
+    marginBottom: '6px',
+    fontSize: '14px',
+    fontWeight: '500',
+    color: '#333333'
+  },
+  input: {
+    width: '100%',
+    padding: '10px 12px',
+    fontSize: '14px',
+    border: '1px solid #dddddd',
+    borderRadius: '4px',
+    outline: 'none'
+  },
+  button: {
+    width: '100%',
+    padding: '12px',
+    backgroundColor: '#6c27ab',
+    color: 'white',
+    border: 'none',
+    borderRadius: '4px',
+    fontSize: '16px',
+    fontWeight: '500',
+    cursor: 'pointer'
+  },
+  buttonDisabled: {
+    opacity: '0.7',
+    cursor: 'not-allowed'
+  },
+  footer: {
+    padding: '16px 24px',
+    textAlign: 'center',
+    borderTop: '1px solid #eeeeee',
+    backgroundColor: '#f9f9f9'
+  },
+  link: {
+    color: '#6c27ab',
+    fontWeight: '500',
+    textDecoration: 'none'
+  },
+  error: {
+    backgroundColor: '#fff0f0',
+    borderLeft: '4px solid #dc2626',
+    color: '#dc2626',
+    padding: '12px',
+    marginBottom: '20px',
+    fontSize: '14px',
+    borderRadius: '4px'
+  }
+};
+
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -31,8 +122,7 @@ export default function Login() {
     } catch (err) {
       console.error('Erro ao fazer login:', err);
       
-      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 
-'auth/wrong-password') {
+      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
         setError('E-mail ou senha incorretos');
       } else {
         setError('Erro ao fazer login. Tente novamente.');
@@ -43,96 +133,60 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-white to-purple-50">
-      <div className="w-full max-w-md">
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="px-8 pt-8 pb-6">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-purple-700">Voxemy</h1>
-              <p className="mt-2 text-gray-600">Entre para acessar sua conta</p>
-            </div>
-            
-            {error && (
-              <div className="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded">
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
-            )}
-            
-            <form onSubmit={handleSubmit}>
-              <div className="mb-6">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  E-mail
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none 
-focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                  placeholder="seu@email.com"
-                  required
-                />
-              </div>
-              
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-1">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Senha
-                  </label>
-                  <Link href="/auth/forgot-password" className="text-xs font-medium text-purple-600 
-hover:text-purple-500">
-                    Esqueceu a senha?
-                  </Link>
-                </div>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 rounded-md border border-gray-300 focus:outline-none 
-focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-              
-              <div className="mb-6">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full flex justify-center items-center py-3 px-4 border border-transparent 
-rounded-md shadow-sm text-base font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none 
-focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors disabled:opacity-50 
-disabled:cursor-not-allowed"
-                >
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
-xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" 
-strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 
-5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Entrando...
-                    </>
-                  ) : (
-                    'Entrar'
-                  )}
-                </button>
-              </div>
-            </form>
+    <div style={styles.container}>
+      <div style={styles.card}>
+        <div style={styles.cardHeader}>
+          <h1 style={styles.title}>Voxemy</h1>
+          <p style={styles.subtitle}>Entre para acessar sua conta</p>
+        </div>
+        
+        <form onSubmit={handleSubmit} style={styles.form}>
+          {error && <div style={styles.error}>{error}</div>}
+          
+          <div style={styles.formGroup}>
+            <label htmlFor="email" style={styles.label}>E-mail</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={styles.input}
+              placeholder="seu@email.com"
+              required
+            />
           </div>
           
-          <div className="px-8 py-6 bg-gray-50 border-t border-gray-100">
-            <p className="text-sm text-center text-gray-600">
-              Não tem uma conta?{' '}
-              <Link href="/auth/signup" className="font-medium text-purple-600 hover:text-purple-500">
-                Cadastre-se
-              </Link>
-            </p>
+          <div style={styles.formGroup}>
+            <label htmlFor="password" style={styles.label}>Senha</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={styles.input}
+              placeholder="••••••••"
+              required
+            />
           </div>
+          
+          <div style={styles.formGroup}>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{...styles.button, ...(loading ? styles.buttonDisabled : {})}}
+            >
+              {loading ? 'Entrando...' : 'Entrar'}
+            </button>
+          </div>
+        </form>
+        
+        <div style={styles.footer}>
+          <p>
+            Não tem uma conta?{' '}
+            <Link href="/auth/signup" style={styles.link}>
+              Cadastre-se
+            </Link>
+          </p>
         </div>
       </div>
     </div>
