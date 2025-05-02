@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { auth } from '@/lib/firebase-fixed'; // Atualizado para usar a configuração corrigida
+import { auth } from '@/lib/firebase-fixed';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {
@@ -36,7 +36,8 @@ export default function Login() {
       console.error('Erro ao fazer login:', err);
       
       // Tratamento de erros específicos do Firebase
-      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password') {
+      if (err.code === 'auth/invalid-email' || err.code === 'auth/user-not-found' || err.code === 
+'auth/wrong-password') {
         setError('E-mail ou senha incorretos');
       } else {
         setError('Erro ao fazer login. Tente novamente.');
@@ -48,7 +49,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-[#E6F0FF] py-12 px-4">
-      <div className="container-auth">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-8">
         <h1 className="text-2xl font-bold text-center text-[#0F2D5A] mb-6">Login</h1>
         
         {error && (
@@ -67,7 +68,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="seu@email.com"
               required
             />
@@ -82,7 +83,7 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-field"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Sua senha"
               required
             />
@@ -90,7 +91,7 @@ export default function Login() {
           
           <button
             type="submit"
-            className="btn-primary w-full py-2 text-center"
+            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md"
             disabled={loading}
           >
             {loading ? 'Entrando...' : 'Entrar'}
