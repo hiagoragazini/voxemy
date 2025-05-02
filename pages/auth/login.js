@@ -3,65 +3,19 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { auth } from "@/lib/firebase-fixed";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Loader } from "lucide-react";
-
-// Supondo que você tenha esses componentes na sua UI
-// Se não tiver, você precisará implementá-los ou usar alternativas
-const Button = ({ children, className, disabled, type }) => {
-  return (
-    <button
-      type={type}
-      disabled={disabled}
-      className={`${className} transition-colors rounded-md`}
-    >
-      {children}
-    </button>
-  );
-};
-
-const Input = ({ id, type, value, onChange, placeholder, className, required }) => {
-  return (
-    <input
-      id={id}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={placeholder}
-      className={`w-full px-4 py-2 border rounded-md outline-none ${className}`}
-      required={required}
-    />
-  );
-};
-
-const Label = ({ htmlFor, className, children }) => {
-  return (
-    <label htmlFor={htmlFor} className={`block ${className}`}>
-      {children}
-    </label>
-  );
-};
-
-const Card = ({ children, className }) => {
-  return (
-    <div className={`${className} rounded-xl`}>
-      {children}
-    </div>
-  );
-};
 
 // Componente VoxemyLogo simplificado
-const VoxemyLogo = ({ className = "" }) => {
+const VoxemyLogo = () => {
   return (
-    <div className={`flex items-center justify-center ${className}`}>
-      <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-800 
-to-purple-500">
+    <div className="flex items-center justify-center">
+      <span className="text-3xl font-bold text-purple-600">
         Voxemy
       </span>
     </div>
   );
 };
 
-const Login = () => {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -84,7 +38,7 @@ const Login = () => {
       await signInWithEmailAndPassword(auth, email, password);
       
       // Redirecionamento após login bem-sucedido
-      router.push("/dashboard");
+      router.push("/");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
       setError("Email ou senha incorretos. Tente novamente.");
@@ -94,91 +48,152 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white 
-to-gray-50">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <VoxemyLogo className="w-full mb-6" />
-          <h1 className="text-2xl font-semibold text-gray-900">Entre na sua conta</h1>
-          <p className="mt-2 text-gray-600">
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '1rem',
+      background: 'linear-gradient(to bottom, white, #f5f5f5)'
+    }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '400px'
+      }}>
+        <div style={{textAlign: 'center', marginBottom: '2rem'}}>
+          <VoxemyLogo />
+          <h1 style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            color: '#333',
+            marginTop: '1rem'
+          }}>Entre na sua conta</h1>
+          <p style={{
+            marginTop: '0.5rem',
+            color: '#666'
+          }}>
             Acesse sua conta para utilizar a plataforma Voxemy
           </p>
         </div>
         
-        <Card className="p-6 bg-white shadow-sm border border-gray-100 rounded-xl">
+        <div style={{
+          padding: '1.5rem',
+          backgroundColor: 'white',
+          borderRadius: '0.75rem',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+          border: '1px solid #eee'
+        }}>
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            <div style={{
+              marginBottom: '1rem',
+              padding: '0.75rem',
+              backgroundColor: '#fee2e2',
+              borderLeft: '4px solid #ef4444',
+              color: '#b91c1c',
+              borderRadius: '0.25rem'
+            }}>
               {error}
             </div>
           )}
           
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
+          <form onSubmit={handleLogin} style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
+            <div>
+              <label htmlFor="email" style={{
+                display: 'block',
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem'
+              }}>
                 Email
-              </Label>
-              <Input
+              </label>
+              <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                className="h-11 bg-gray-50 border-gray-200 focus:border-purple-600 focus:ring-purple-600"
+                style={{
+                  width: '100%',
+                  height: '2.75rem',
+                  padding: '0 0.75rem',
+                  backgroundColor: '#f9fafb',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.375rem',
+                  outline: 'none'
+                }}
                 required
               />
             </div>
             
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm font-medium">
+            <div>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginBottom: '0.5rem'
+              }}>
+                <label htmlFor="password" style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '500'
+                }}>
                   Senha
-                </Label>
+                </label>
                 <Link
                   href="/recuperar-senha"
-                  className="text-sm font-medium text-purple-600 hover:text-purple-800"
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    color: '#7c3aed',
+                    textDecoration: 'none'
+                  }}
                 >
                   Esqueceu a senha?
                 </Link>
               </div>
-              <Input
+              <input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="h-11 bg-gray-50 border-gray-200 focus:border-purple-600 focus:ring-purple-600"
+                style={{
+                  width: '100%',
+                  height: '2.75rem',
+                  padding: '0 0.75rem',
+                  backgroundColor: '#f9fafb',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '0.375rem',
+                  outline: 'none'
+                }}
                 required
               />
             </div>
             
-            <Button
+            <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white font-medium"
+              style={{
+                width: '100%',
+                height: '2.75rem',
+                backgroundColor: '#7c3aed',
+                color: 'white',
+                fontWeight: '500',
+                border: 'none',
+                borderRadius: '0.375rem',
+                cursor: isLoading ? 'not-allowed' : 'pointer',
+                opacity: isLoading ? '0.7' : '1'
+              }}
             >
-              {isLoading ? (
-                <>
-                  {/* Você pode substituir o Loader por um componente de spinner simples */}
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
-xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" 
-strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 
-12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Entrando...
-                </>
-              ) : (
-                "Entrar"
-              )}
-            </Button>
+              {isLoading ? "Entrando..." : "Entrar"}
+            </button>
           </form>
-        </Card>
+        </div>
         
-        <div className="text-center mt-6">
-          <p className="text-gray-600">
+        <div style={{textAlign: 'center', marginTop: '1.5rem'}}>
+          <p style={{color: '#666'}}>
             Ainda não tem uma conta?{" "}
-            <Link href="/cadastro" className="font-medium text-purple-600 hover:text-purple-800">
+            <Link href="/cadastro" style={{fontWeight: '500', color: '#7c3aed', textDecoration: 'none'}}>
               Cadastre-se
             </Link>
           </p>
@@ -186,6 +201,4 @@ strokeWidth="4"></circle>
       </div>
     </div>
   );
-};
-
-export default Login;
+}
