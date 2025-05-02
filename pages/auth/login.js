@@ -3,50 +3,18 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { auth } from "@/lib/firebase-fixed";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Loader } from "lucide-react"; // Instale com: npm install lucide-react
-
-// Se você ainda não tiver esses componentes, deixe simples por enquanto
-const Button = ({ children, className, disabled, type }) => (
-  <button type={type} disabled={disabled} className={className}>
-    {children}
-  </button>
-);
-
-const Input = (props) => <input {...props} />;
-const Label = ({ htmlFor, className, children }) => (
-  <label htmlFor={htmlFor} className={className}>{children}</label>
-);
-const Card = ({ children, className }) => <div className={className}>{children}</div>;
-
-// Componente VoxemyLogo que você já definiu
-const VoxemyLogo = ({ className = "" }) => (
-  <div className={`flex items-center justify-center ${className}`}>
-    <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-800 
-to-purple-500">
-      Voxemy
-    </span>
-  </div>
-);
-
-// Função que simula o toast - substitua pelo seu sistema de notificação real
-const useToast = () => {
-  const [messages, setMessages] = useState([]);
-  
-  const toast = ({ title, description, variant }) => {
-    console.log(title, description);
-    const newMessage = { title, description, variant };
-    setMessages(prev => [...prev, newMessage]);
-    // Você pode implementar um sistema de notificação aqui
-  };
-  
-  return { toast, messages };
-};
+import { Loader } from "lucide-react";
+import VoxemyLogo from "@/components/VoxemyLogo";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const { toast } = useToast();
   const router = useRouter();
 
@@ -59,12 +27,10 @@ const Login = () => {
         description: "Por favor, preencha todos os campos.",
         variant: "destructive",
       });
-      setError("Por favor, preencha todos os campos.");
       return;
     }
 
     setIsLoading(true);
-    setError("");
 
     try {
       // Autenticação real com Firebase
@@ -75,16 +41,13 @@ const Login = () => {
         description: "Bem-vindo ao Voxemy.",
       });
       
-      // Redirecionamento após login
-      router.push("/dashboard");
+      router.push("/dashboard"); // Redirecionamento após login
     } catch (error) {
-      console.error("Erro ao fazer login:", error);
       toast({
         title: "Erro ao fazer login",
         description: "Email ou senha incorretos. Tente novamente.",
         variant: "destructive",
       });
-      setError("Email ou senha incorretos. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -103,12 +66,6 @@ to-gray-50">
         </div>
         
         <Card className="p-6 bg-white shadow-sm border border-gray-100 rounded-xl">
-          {error && (
-            <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
-              {error}
-            </div>
-          )}
-          
           <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
@@ -120,8 +77,7 @@ to-gray-50">
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                className="w-full h-11 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md 
-focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
+                className="h-11 bg-gray-50 border-gray-200 focus:border-purple-600 focus:ring-purple-600"
                 required
               />
             </div>
@@ -144,8 +100,7 @@ focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full h-11 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md 
-focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
+                className="h-11 bg-gray-50 border-gray-200 focus:border-purple-600 focus:ring-purple-600"
                 required
               />
             </div>
@@ -153,18 +108,11 @@ focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full h-11 flex items-center justify-center bg-purple-600 hover:bg-purple-700 
-text-white font-medium rounded-md transition-colors"
+              className="w-full h-11 bg-purple-600 hover:bg-purple-700 text-white font-medium"
             >
               {isLoading ? (
                 <>
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
-xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" 
-strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 
-12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
                   Entrando...
                 </>
               ) : (
