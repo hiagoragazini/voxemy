@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { auth } from '@/lib/firebase';
+import { auth } from '@/lib/firebase-fixed'; // Atualizado para usar a configuração corrigida
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
 export default function Login() {
@@ -25,9 +25,11 @@ export default function Login() {
     }
 
     try {
+      console.log("Tentando fazer login com Firebase...");
       // Fazer login no Firebase Auth
       await signInWithEmailAndPassword(auth, email, password);
       
+      console.log("Login bem-sucedido, redirecionando...");
       // Redirecionar para o dashboard
       router.push('/dashboard');
     } catch (err: any) {
