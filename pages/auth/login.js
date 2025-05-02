@@ -3,29 +3,62 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { auth } from "@/lib/firebase-fixed";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { Loader } from "lucide-react"; // Instale com: npm install lucide-react
 
-// Componente VoxemyLogo simplificado
-const VoxemyLogo = () => {
-  return (
-    <div className="flex items-center justify-center">
-      <span className="text-3xl font-bold text-purple-600">
-        Voxemy
-      </span>
-    </div>
-  );
+// Se você ainda não tiver esses componentes, deixe simples por enquanto
+const Button = ({ children, className, disabled, type }) => (
+  <button type={type} disabled={disabled} className={className}>
+    {children}
+  </button>
+);
+
+const Input = (props) => <input {...props} />;
+const Label = ({ htmlFor, className, children }) => (
+  <label htmlFor={htmlFor} className={className}>{children}</label>
+);
+const Card = ({ children, className }) => <div className={className}>{children}</div>;
+
+// Componente VoxemyLogo que você já definiu
+const VoxemyLogo = ({ className = "" }) => (
+  <div className={`flex items-center justify-center ${className}`}>
+    <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-800 
+to-purple-500">
+      Voxemy
+    </span>
+  </div>
+);
+
+// Função que simula o toast - substitua pelo seu sistema de notificação real
+const useToast = () => {
+  const [messages, setMessages] = useState([]);
+  
+  const toast = ({ title, description, variant }) => {
+    console.log(title, description);
+    const newMessage = { title, description, variant };
+    setMessages(prev => [...prev, newMessage]);
+    // Você pode implementar um sistema de notificação aqui
+  };
+  
+  return { toast, messages };
 };
 
-export default function Login() {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const { toast } = useToast();
   const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     
     if (!email || !password) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha todos os campos.",
+        variant: "destructive",
+      });
       setError("Por favor, preencha todos os campos.");
       return;
     }
@@ -37,10 +70,20 @@ export default function Login() {
       // Autenticação real com Firebase
       await signInWithEmailAndPassword(auth, email, password);
       
-      // Redirecionamento após login bem-sucedido
-      router.push("/");
+      toast({
+        title: "Login realizado com sucesso!",
+        description: "Bem-vindo ao Voxemy.",
+      });
+      
+      // Redirecionamento após login
+      router.push("/dashboard");
     } catch (error) {
       console.error("Erro ao fazer login:", error);
+      toast({
+        title: "Erro ao fazer login",
+        description: "Email ou senha incorretos. Tente novamente.",
+        variant: "destructive",
+      });
       setError("Email ou senha incorretos. Tente novamente.");
     } finally {
       setIsLoading(false);
@@ -48,152 +91,93 @@ export default function Login() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '1rem',
-      background: 'linear-gradient(to bottom, white, #f5f5f5)'
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '400px'
-      }}>
-        <div style={{textAlign: 'center', marginBottom: '2rem'}}>
-          <VoxemyLogo />
-          <h1 style={{
-            fontSize: '1.5rem',
-            fontWeight: '600',
-            color: '#333',
-            marginTop: '1rem'
-          }}>Entre na sua conta</h1>
-          <p style={{
-            marginTop: '0.5rem',
-            color: '#666'
-          }}>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-b from-white 
+to-gray-50">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
+          <VoxemyLogo className="w-full mb-6" />
+          <h1 className="text-2xl font-semibold text-gray-900">Entre na sua conta</h1>
+          <p className="mt-2 text-gray-600">
             Acesse sua conta para utilizar a plataforma Voxemy
           </p>
         </div>
         
-        <div style={{
-          padding: '1.5rem',
-          backgroundColor: 'white',
-          borderRadius: '0.75rem',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-          border: '1px solid #eee'
-        }}>
+        <Card className="p-6 bg-white shadow-sm border border-gray-100 rounded-xl">
           {error && (
-            <div style={{
-              marginBottom: '1rem',
-              padding: '0.75rem',
-              backgroundColor: '#fee2e2',
-              borderLeft: '4px solid #ef4444',
-              color: '#b91c1c',
-              borderRadius: '0.25rem'
-            }}>
+            <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
               {error}
             </div>
           )}
           
-          <form onSubmit={handleLogin} style={{display: 'flex', flexDirection: 'column', gap: '1.5rem'}}>
-            <div>
-              <label htmlFor="email" style={{
-                display: 'block',
-                fontSize: '0.875rem',
-                fontWeight: '500',
-                marginBottom: '0.5rem'
-              }}>
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium">
                 Email
-              </label>
-              <input
+              </Label>
+              <Input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="seu@email.com"
-                style={{
-                  width: '100%',
-                  height: '2.75rem',
-                  padding: '0 0.75rem',
-                  backgroundColor: '#f9fafb',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '0.375rem',
-                  outline: 'none'
-                }}
+                className="w-full h-11 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md 
+focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
                 required
               />
             </div>
             
-            <div>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                marginBottom: '0.5rem'
-              }}>
-                <label htmlFor="password" style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '500'
-                }}>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-sm font-medium">
                   Senha
-                </label>
+                </Label>
                 <Link
                   href="/recuperar-senha"
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: '500',
-                    color: '#7c3aed',
-                    textDecoration: 'none'
-                  }}
+                  className="text-sm font-medium text-purple-600 hover:text-purple-800"
                 >
                   Esqueceu a senha?
                 </Link>
               </div>
-              <input
+              <Input
                 id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                style={{
-                  width: '100%',
-                  height: '2.75rem',
-                  padding: '0 0.75rem',
-                  backgroundColor: '#f9fafb',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '0.375rem',
-                  outline: 'none'
-                }}
+                className="w-full h-11 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md 
+focus:outline-none focus:border-purple-600 focus:ring-1 focus:ring-purple-600"
                 required
               />
             </div>
             
-            <button
+            <Button
               type="submit"
               disabled={isLoading}
-              style={{
-                width: '100%',
-                height: '2.75rem',
-                backgroundColor: '#7c3aed',
-                color: 'white',
-                fontWeight: '500',
-                border: 'none',
-                borderRadius: '0.375rem',
-                cursor: isLoading ? 'not-allowed' : 'pointer',
-                opacity: isLoading ? '0.7' : '1'
-              }}
+              className="w-full h-11 flex items-center justify-center bg-purple-600 hover:bg-purple-700 
+text-white font-medium rounded-md transition-colors"
             >
-              {isLoading ? "Entrando..." : "Entrar"}
-            </button>
+              {isLoading ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" 
+xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" 
+strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 
+12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Entrando...
+                </>
+              ) : (
+                "Entrar"
+              )}
+            </Button>
           </form>
-        </div>
+        </Card>
         
-        <div style={{textAlign: 'center', marginTop: '1.5rem'}}>
-          <p style={{color: '#666'}}>
+        <div className="text-center mt-6">
+          <p className="text-gray-600">
             Ainda não tem uma conta?{" "}
-            <Link href="/cadastro" style={{fontWeight: '500', color: '#7c3aed', textDecoration: 'none'}}>
+            <Link href="/cadastro" className="font-medium text-purple-600 hover:text-purple-800">
               Cadastre-se
             </Link>
           </p>
@@ -201,4 +185,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;
